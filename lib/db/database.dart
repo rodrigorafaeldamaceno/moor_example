@@ -44,8 +44,8 @@ class MyDatabase extends _$MyDatabase {
     categoryDAO = CategoryDAO(this);
   }
 
-  ProductDAO productDAO;
   CategoryDAO categoryDAO;
+  ProductDAO productDAO;
 
   // you should bump this number whenever you change or add a table definition. Migrations
   // are covered later in this readme.

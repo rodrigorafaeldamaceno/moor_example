@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moor_example/pages/home/home_page.dart';
+import 'package:moor_example/pages/product/product_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: ProductPage(),
     );
   }
 }

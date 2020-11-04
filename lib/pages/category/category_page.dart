@@ -9,17 +9,13 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   final _categoryNameController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
   final _controller = CategoryStore();
+  final _formKey = GlobalKey<FormState>();
 
   _addCategory() {
     showDialog(
       context: context,
       builder: (context) {
-        _categoryNameController.clear();
-
         return Dialog(
           child: Container(
             margin: EdgeInsets.all(20),
@@ -46,9 +42,12 @@ class _CategoryPageState extends State<CategoryPage> {
                     colorBrightness: Brightness.dark,
                     child: Text('Add'),
                     onPressed: () async {
-                      if (_categoryNameController.text.isNotEmpty)
-                        await _controller.addCategory(Category(
-                            id: null, name: _categoryNameController.text));
+                      if (!_formKey.currentState.validate()) return null;
+
+                      await _controller.addCategory(Category(
+                          id: null, name: _categoryNameController.text));
+
+                      _categoryNameController.clear();
 
                       Navigator.pop(context);
                     },
@@ -73,7 +72,7 @@ class _CategoryPageState extends State<CategoryPage> {
         onPressed: _addCategory,
       ),
       body: StreamBuilder<List<Category>>(
-        stream: MyDatabase.instance.categoryDAO.find(),
+        stream: _controller.find(),
         initialData: List<Category>(),
         builder:
             (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
