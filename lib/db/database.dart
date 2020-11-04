@@ -39,10 +39,13 @@ LazyDatabase _openConnection() {
 class MyDatabase extends _$MyDatabase {
   static MyDatabase instance = MyDatabase._internal();
 
-  MyDatabase._internal() : super(_openConnection());
+  MyDatabase._internal() : super(_openConnection()) {
+    productDAO = ProductDAO(this);
+    categoryDAO = CategoryDAO(this);
+  }
 
-  ProductDAO productDAO = ProductDAO(instance);
-  CategoryDAO categoryDAO = CategoryDAO(instance);
+  ProductDAO productDAO;
+  CategoryDAO categoryDAO;
 
   // you should bump this number whenever you change or add a table definition. Migrations
   // are covered later in this readme.
