@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moor_example/db/database.dart';
+import 'package:moor_example/stores/category/category_store.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class _CategoryPageState extends State<CategoryPage> {
   final _categoryNameController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  final _controller = CategoryStore();
 
   _addCategory() {
     showDialog(
@@ -44,10 +47,8 @@ class _CategoryPageState extends State<CategoryPage> {
                     child: Text('Add'),
                     onPressed: () async {
                       if (_categoryNameController.text.isNotEmpty)
-                        await MyDatabase.instance.categoryDAO.addCategory(
-                          Category(
-                              id: null, name: _categoryNameController.text),
-                        );
+                        await _controller.addCategory(Category(
+                            id: null, name: _categoryNameController.text));
 
                       Navigator.pop(context);
                     },
@@ -59,10 +60,6 @@ class _CategoryPageState extends State<CategoryPage> {
         );
       },
     );
-  }
-
-  Future _removeCategory(int id) async {
-    await MyDatabase.instance.categoryDAO.removeCategory(id);
   }
 
   @override
@@ -95,8 +92,9 @@ class _CategoryPageState extends State<CategoryPage> {
                             title: Text(snapshot.data[index].name),
                             trailing: IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                _removeCategory(snapshot.data[index].id);
+                              onPressed: () async {
+                                await _controller
+                                    .removeCategory(snapshot.data[index].id);
                               },
                             ),
                           );
