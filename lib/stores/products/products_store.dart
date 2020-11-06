@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:moor_example/db/dao/products/product_dao.dart';
 import 'package:moor_example/db/database.dart';
 import 'package:moor_example/stores/category/category_store.dart';
 part 'products_store.g.dart';
@@ -18,6 +19,10 @@ abstract class _ProductsStoreBase with Store {
 
   Stream<List<Product>> find() {
     return _dao.find();
+  }
+
+  Stream<List<ProductWithNameCategory>> findProductsWithNameCategory() {
+    return _dao.findProductsWithNameCategory();
   }
 
   Future addProduct() async {

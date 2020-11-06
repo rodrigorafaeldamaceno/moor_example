@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moor_example/db/dao/products/product_dao.dart';
 import 'package:moor_example/db/database.dart';
 import 'package:moor_example/pages/category/category_page.dart';
 import 'package:moor_example/stores/products/products_store.dart';
@@ -111,7 +112,7 @@ class _ProductPageState extends State<ProductPage> {
                           FocusScope.of(context).requestFocus(FocusNode());
                         },
                         onChanged: (value) {
-                          _controller.selectedCategory = value;
+                          _controller.selectedCategory = value.copyWith();
                         },
                         decoration: InputDecoration(
                           labelText: 'Category',
@@ -169,10 +170,11 @@ class _ProductPageState extends State<ProductPage> {
         child: Icon(Icons.add),
         onPressed: _addProduct,
       ),
-      body: StreamBuilder<List<Product>>(
-        stream: _controller.find(),
-        initialData: List<Product>(),
-        builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
+      body: StreamBuilder<List<ProductWithNameCategory>>(
+        stream: _controller.findProductsWithNameCategory(),
+        initialData: List<ProductWithNameCategory>(),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ProductWithNameCategory>> snapshot) {
           return !snapshot.hasData
               ? Container()
               : Container(
@@ -185,12 +187,13 @@ class _ProductPageState extends State<ProductPage> {
                         itemCount: snapshot.data.length,
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
-                            title: Text(snapshot.data[index].name),
+                            title: Text(snapshot.data[index].product.name),
+                            subtitle: Text(snapshot.data[index].nameCategory),
                             trailing: IconButton(
                               icon: Icon(Icons.delete, color: Colors.red),
                               onPressed: () async {
                                 await _controller.removeProduct(
-                                  snapshot.data[index].id,
+                                  snapshot.data[index].product.id,
                                 );
                               },
                             ),
