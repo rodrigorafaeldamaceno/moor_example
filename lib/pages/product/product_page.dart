@@ -1,8 +1,12 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_example/db/dao/products/product_dao.dart';
 import 'package:moor_example/db/database.dart';
 import 'package:moor_example/pages/category/category_page.dart';
 import 'package:moor_example/stores/products/products_store.dart';
+import 'package:moor_example/utils/utils.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -12,6 +16,21 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final _controller = ProductsStore();
   final _formKey = GlobalKey<FormState>();
+
+  StreamSubscription<ConnectivityResult> subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    synchronize();
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      synchronize();
+    });
+  }
 
   _addProduct() {
     _controller.nameController.clear();

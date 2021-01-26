@@ -44,8 +44,12 @@ class _CategoryPageState extends State<CategoryPage> {
                     onPressed: () async {
                       if (!_formKey.currentState.validate()) return null;
 
-                      await _controller.addCategory(Category(
-                          id: null, name: _categoryNameController.text));
+                      await _controller.addCategory(
+                        Category(
+                          id: null,
+                          name: _categoryNameController.text,
+                        ),
+                      );
 
                       _categoryNameController.clear();
 
@@ -71,38 +75,53 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Icon(Icons.add),
         onPressed: _addCategory,
       ),
-      body: StreamBuilder<List<Category>>(
-        stream: _controller.find(),
-        initialData: List<Category>(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
-          return !snapshot.hasData
-              ? Container()
-              : Container(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Column(
-                    children: [
-                      Text('${snapshot.data.length} Records found'),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(snapshot.data[index].name),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () async {
-                                await _controller
-                                    .removeCategory(snapshot.data[index].id);
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                );
-        },
+      body: SingleChildScrollView(
+        child: StreamBuilder<List<Category>>(
+          stream: _controller.find(),
+          initialData: List<Category>(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
+            return !snapshot.hasData
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        Text('${snapshot.data.length} Records found'),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            print(snapshot.data[index].synchronized);
+                            return ListTile(
+                              title: Text(snapshot.data[index].name),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.sync,
+                                    color: snapshot.data[index].synchronized ==
+                                            true
+                                        ? Theme.of(context).accentColor
+                                        : Colors.red,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () async {
+                                      await _controller.removeCategory(
+                                          snapshot.data[index].id);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
       ),
     );
   }

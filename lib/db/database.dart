@@ -25,6 +25,8 @@ class Products extends Table {
 class Categories extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
+  BoolColumn get synchronized =>
+      boolean().nullable().withDefault(const Constant(false))();
 }
 
 LazyDatabase _openConnection() {
@@ -50,5 +52,26 @@ class MyDatabase extends _$MyDatabase {
   // you should bump this number whenever you change or add a table definition. Migrations
   // are covered later in this readme.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) {
+        return m.createAll();
+      },
+      beforeOpen: (details) async {
+        print('version now: ${details.versionNow}');
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        print('old version: $from');
+        print('to version: $to');
+        if (from < schemaVersion) {
+          // we added the dueDate property in the change from version 1
+          print('migration');
+          await m.addColumn(categories, categories.synchronized);
+        }
+      },
+    );
+  }
 }
