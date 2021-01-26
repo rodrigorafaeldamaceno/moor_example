@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moor_example/pages/category/category_page.dart';
 import 'package:moor_example/pages/product/product_page.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         brightness: Brightness.dark,
       ),
-      home: ProductPage(),
+      home: CategoryPage(),
     );
   }
 }

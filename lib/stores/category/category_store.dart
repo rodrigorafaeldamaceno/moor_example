@@ -14,11 +14,10 @@ abstract class _CategoryStoreBase with Store {
     return dao.find();
   }
 
-  Future addCategory(Category category) async {
+  Future addCategory(Category category, {bool needSynchronize: true}) async {
     await dao.addCategory(category);
 
-    synchronize();
-    return;
+    if (needSynchronize) synchronize();
   }
 
   Future updateCategory(Category category) {
@@ -55,5 +54,20 @@ abstract class _CategoryStoreBase with Store {
     });
 
     // print(response);
+  }
+
+  Future listAllCategoriesFromServer() async {
+    final list = await _data.index();
+
+    if (list.isEmpty || list == null) return;
+
+    await dao.delete(dao.categories).go().catchError((e) => print(e));
+
+    return list.forEach((element) async {
+      await addCategory(
+        Category(id: element.id, name: element.name, synchronized: true),
+        needSynchronize: false,
+      );
+    });
   }
 }

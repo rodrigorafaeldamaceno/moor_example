@@ -10,6 +10,8 @@ Future<bool> checkConnection() async {
 Future synchronize() async {
   if (await checkConnection()) {
     print('sincronizando');
-    CategoryStore().synchronizedAllCategories();
+    await CategoryStore().synchronizedAllCategories();
+
+    await CategoryStore().listAllCategoriesFromServer();
   }
 }
