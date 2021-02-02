@@ -1,4 +1,5 @@
 import 'package:moor_example/db/database.dart';
+import 'package:moor_example/db/tables/category_table.dart';
 import 'package:moor_flutter/moor_flutter.dart';
 
 part 'category_dao.g.dart';
