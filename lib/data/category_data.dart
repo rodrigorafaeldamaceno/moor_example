@@ -6,7 +6,7 @@ class CategoryData {
   Future<bool> store({@required String name, @required int id}) async {
     try {
       Response response = await Dio().post(
-        'http://192.168.2.137:3333/category',
+        'https://moorserver.herokuapp.com/category',
         data: {
           'name': name,
           'id': id,
@@ -26,7 +26,7 @@ class CategoryData {
     var list = List<Category>();
     try {
       Response<List> response =
-          await Dio().get('http://192.168.2.137:3333/categories');
+          await Dio().get('https://moorserver.herokuapp.com/categories');
 
       if (response.statusCode == 200)
         response.data.forEach((element) {

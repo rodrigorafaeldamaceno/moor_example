@@ -104,48 +104,49 @@ class _CategoryPageState extends State<CategoryPage> {
             initialData: List<Category>(),
             builder:
                 (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
-              return !snapshot.hasData
-                  ? Container()
-                  : Container(
-                      padding: EdgeInsets.only(top: 20),
-                      child: Column(
-                        children: [
-                          Text('${snapshot.data.length} Records found'),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              print(snapshot.data[index].synchronized);
+              if (!snapshot.hasData) return Container();
 
-                              return ListTile(
-                                title: Text(snapshot.data[index].name),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.sync,
-                                      color:
-                                          snapshot.data[index].synchronized ==
-                                                  true
-                                              ? Theme.of(context).accentColor
-                                              : Colors.red,
-                                    ),
-                                    IconButton(
-                                      icon:
-                                          Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () async {
-                                        await _controller.removeCategory(
-                                            snapshot.data[index].id);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+              final list = List<Category>();
+              list.addAll(snapshot.data.reversed);
+
+              return Container(
+                padding: EdgeInsets.only(top: 20),
+                child: Column(
+                  children: [
+                    Text('${list.length} Records found'),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: list.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        print(list[index].synchronized);
+
+                        return ListTile(
+                          title: Text(list[index].name),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.sync,
+                                color: list[index].synchronized == true
+                                    ? Theme.of(context).accentColor
+                                    : Colors.red,
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () async {
+                                  await _controller
+                                      .removeCategory(list[index].id);
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ),
