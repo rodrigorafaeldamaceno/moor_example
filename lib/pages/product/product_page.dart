@@ -32,6 +32,11 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
+@override
+void dispose() { 
+  subscription.cancel();
+  super.dispose();
+}
   _addProduct() {
     _controller.nameController.clear();
     _controller.descriptionController.clear();

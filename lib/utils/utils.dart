@@ -12,6 +12,6 @@ Future synchronize() async {
     print('sincronizando');
     await CategoryStore().synchronizedAllCategories();
 
-    await CategoryStore().listAllCategoriesFromServer();
+    // await CategoryStore().listAllCategoriesFromServer();
   }
 }

@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_example/db/database.dart';
 import 'package:moor_example/stores/category/category_store.dart';
+import 'package:moor_example/utils/background_helper.dart';
 import 'package:moor_example/utils/utils.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -16,14 +17,18 @@ class _CategoryPageState extends State<CategoryPage> {
   final _controller = CategoryStore();
   final _formKey = GlobalKey<FormState>();
 
+  // ignore: cancel_subscriptions
   StreamSubscription<ConnectivityResult> subscription;
-
   @override
   void initState() {
     super.initState();
 
-    synchronize();
+    BackgroundHelper.initPlatformState().then((value) {
+      synchronize();
+      _controller.find();
+    });
 
+    // synchronize();
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -31,7 +36,14 @@ class _CategoryPageState extends State<CategoryPage> {
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   _addCategory() {
+    _controller.findList().then((value) => print(value.length));
+
     showDialog(
       context: context,
       builder: (context) {
@@ -94,11 +106,11 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Icon(Icons.add),
         onPressed: _addCategory,
       ),
-      body: SingleChildScrollView(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            print('refresh');
-          },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          synchronize();
+        },
+        child: SingleChildScrollView(
           child: StreamBuilder<List<Category>>(
             stream: _controller.find(),
             initialData: List<Category>(),

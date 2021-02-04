@@ -14,6 +14,11 @@ abstract class _CategoryStoreBase with Store {
     return dao.find();
   }
 
+
+  Future<List<Category>> findList() {
+    return dao.findList();
+  }
+
   Future addCategory(Category category, {bool needSynchronize: true}) async {
     await dao.addCategory(category);
 
@@ -40,7 +45,7 @@ abstract class _CategoryStoreBase with Store {
       );
 
       if (response) {
-        updateCategory(
+        await updateCategory(
           Category(
             id: category.id,
             name: category.name,
