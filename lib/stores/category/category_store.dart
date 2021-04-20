@@ -14,7 +14,6 @@ abstract class _CategoryStoreBase with Store {
     return dao.find();
   }
 
-
   Future<List<Category>> findList() {
     return dao.findList();
   }
@@ -36,8 +35,6 @@ abstract class _CategoryStoreBase with Store {
   Future synchronizedAllCategories() async {
     final categories = await dao.findCategoriesUnsynchronized();
 
-    print(categories.toList());
-
     categories.forEach((category) async {
       final response = await _data.store(
         name: category.name,
@@ -57,8 +54,6 @@ abstract class _CategoryStoreBase with Store {
             'falha ao atualizar o categoria ${category.id} - ${category.name}');
       }
     });
-
-    // print(response);
   }
 
   Future listAllCategoriesFromServer() async {
@@ -66,7 +61,9 @@ abstract class _CategoryStoreBase with Store {
 
     if (list.isEmpty || list == null) return;
 
-    await dao.delete(dao.categories).go().catchError((e) => print(e));
+    await (dao.delete(dao.categories)
+          ..where((tbl) => tbl.synchronized.equals(true)))
+        .go();
 
     return list.forEach((element) async {
       await addCategory(

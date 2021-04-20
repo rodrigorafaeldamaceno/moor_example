@@ -32,8 +32,6 @@ class CategoryData {
         response.data.forEach((element) {
           list.add(Category.fromJson(element));
         });
-      else
-        return list;
     } catch (e) {
       return list;
     }

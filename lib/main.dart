@@ -1,13 +1,17 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_example/pages/category/category_page.dart';
+import 'package:moor_example/pages/product/product_page.dart';
 import 'package:moor_example/utils/background_helper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 
   BackgroundFetch.registerHeadlessTask(
-      BackgroundHelper.backgroundFetchHeadlessTask);
+    BackgroundHelper.backgroundFetchHeadlessTask,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,11 +21,11 @@ class MyApp extends StatelessWidget {
       title: 'Offline-Firt App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         brightness: Brightness.dark,
       ),
-      home: CategoryPage(),
+      home: ProductPage(),
     );
   }
 }

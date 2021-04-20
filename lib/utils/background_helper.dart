@@ -1,7 +1,5 @@
 import 'package:background_fetch/background_fetch.dart';
-import 'package:moor_example/db/database.dart';
 import 'package:moor_example/stores/category/category_store.dart';
-import 'package:moor_example/utils/utils.dart';
 
 class BackgroundHelper {
   /// This "Headless Task" is run when app is terminated.
