@@ -68,9 +68,7 @@ class _CategoryPageState extends State<CategoryPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  RaisedButton(
-                    color: Colors.blue,
-                    colorBrightness: Brightness.dark,
+                  ElevatedButton(
                     child: Text('Add'),
                     onPressed: () async {
                       if (!_formKey.currentState.validate()) return null;
@@ -113,12 +111,12 @@ class _CategoryPageState extends State<CategoryPage> {
         child: SingleChildScrollView(
           child: StreamBuilder<List<Category>>(
             stream: _controller.find(),
-            initialData: List<Category>(),
+            initialData: <Category>[],
             builder:
                 (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
               if (!snapshot.hasData) return Container();
 
-              final list = List<Category>();
+              List<Category> list = [];
               list.addAll(snapshot.data.reversed);
 
               return Container(
@@ -131,8 +129,6 @@ class _CategoryPageState extends State<CategoryPage> {
                       itemCount: list.length,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        print(list[index].synchronized);
-
                         return ListTile(
                           title: Text(list[index].name),
                           trailing: Row(
@@ -147,8 +143,11 @@ class _CategoryPageState extends State<CategoryPage> {
                               IconButton(
                                 icon: Icon(Icons.delete, color: Colors.red),
                                 onPressed: () async {
+                                  print(list[index].toJson());
                                   await _controller
                                       .removeCategory(list[index].id);
+                                  await _controller.removeCategoryFromServer(
+                                      list[index].uuid);
                                 },
                               ),
                             ],

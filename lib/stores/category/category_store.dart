@@ -32,6 +32,10 @@ abstract class _CategoryStoreBase with Store {
     return dao.removeCategory(id);
   }
 
+  Future<bool> removeCategoryFromServer(String uuid) {
+    return _data.delete(uuid: uuid);
+  }
+
   Future synchronizedAllCategories() async {
     final categories = await dao.findCategoriesUnsynchronized();
 
@@ -67,7 +71,7 @@ abstract class _CategoryStoreBase with Store {
 
     return list.forEach((element) async {
       await addCategory(
-        Category(id: element.id, name: element.name, synchronized: true),
+        element.copyWith(synchronized: true),
         needSynchronize: false,
       );
     });

@@ -1,6 +1,5 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:moor_example/pages/category/category_page.dart';
 import 'package:moor_example/pages/product/product_page.dart';
 import 'package:moor_example/utils/background_helper.dart';
 
@@ -24,6 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         brightness: Brightness.dark,
+        // primaryColor: Colors.teal,
       ),
       home: ProductPage(),
     );

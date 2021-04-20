@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_example/db/database.dart';
+import 'package:moor_example/utils/routes_api.dart';
 
 class CategoryData {
   Future<bool> store({@required String name, @required int id}) async {
     try {
       Response response = await Dio().post(
-        'https://moorserver.herokuapp.com/category',
+        RoutesApi.CREATE_CATEGORY,
         data: {
           'name': name,
           'id': id,
@@ -23,10 +24,9 @@ class CategoryData {
   }
 
   Future<List<Category>> index() async {
-    var list = List<Category>();
+    List<Category> list = [];
     try {
-      Response<List> response =
-          await Dio().get('https://moorserver.herokuapp.com/categories');
+      Response<List> response = await Dio().get(RoutesApi.LIST_CATEGORIES);
 
       if (response.statusCode == 200)
         response.data.forEach((element) {
@@ -36,5 +36,20 @@ class CategoryData {
       return list;
     }
     return list;
+  }
+
+  Future<bool> delete({@required String uuid}) async {
+    try {
+      Response response = await Dio().delete(
+        RoutesApi.CREATE_CATEGORY + '/$uuid',
+      );
+
+      if (response.statusCode == 200)
+        return true;
+      else
+        return false;
+    } catch (e) {
+      return false;
+    }
   }
 }

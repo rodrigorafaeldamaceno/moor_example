@@ -6,4 +6,7 @@ class Categories extends Table {
   TextColumn get name => text()();
   BoolColumn get synchronized =>
       boolean().nullable().withDefault(const Constant(false))();
+
+  @JsonKey('_id')
+  TextColumn get uuid => text().nullable()();
 }

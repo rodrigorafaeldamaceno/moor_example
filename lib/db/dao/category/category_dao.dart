@@ -17,7 +17,6 @@ class CategoryDAO extends DatabaseAccessor<MyDatabase> with _$CategoryDAOMixin {
   }
 
   Future addCategory(Category category) {
-    print(category.toJson());
     return into(categories).insert(category).catchError((e) => print(e));
   }
 
