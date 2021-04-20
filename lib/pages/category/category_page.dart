@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:moor_example/db/database.dart';
+import 'package:moor_example/pages/locator/locator_page.dart';
 import 'package:moor_example/stores/category/category_store.dart';
 import 'package:moor_example/utils/background_helper.dart';
 import 'package:moor_example/utils/utils.dart';
@@ -101,6 +102,18 @@ class _CategoryPageState extends State<CategoryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Categories'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.map),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LocatorPage(),
+                  ));
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

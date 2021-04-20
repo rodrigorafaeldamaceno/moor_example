@@ -14,7 +14,6 @@ abstract class _CategoryStoreBase with Store {
     return dao.find();
   }
 
-
   Future<List<Category>> findList() {
     return dao.findList();
   }
@@ -45,13 +44,7 @@ abstract class _CategoryStoreBase with Store {
       );
 
       if (response) {
-        await updateCategory(
-          Category(
-            id: category.id,
-            name: category.name,
-            synchronized: true,
-          ),
-        );
+        await updateCategory(category.copyWith(synchronized: true));
       } else {
         print(
             'falha ao atualizar o categoria ${category.id} - ${category.name}');
