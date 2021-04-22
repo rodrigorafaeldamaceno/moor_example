@@ -4,7 +4,8 @@ import 'package:moor_example/db/database.dart';
 import 'package:moor_example/utils/routes_api.dart';
 
 class CategoryData {
-  Future<bool> store({@required String name, @required int id}) async {
+  Future<Category> store({@required String name, @required int id}) async {
+    Category category;
     try {
       Response response = await Dio().post(
         RoutesApi.CREATE_CATEGORY,
@@ -15,12 +16,12 @@ class CategoryData {
       );
 
       if (response.statusCode == 200)
-        return true;
-      else
-        return false;
-    } catch (e) {
-      return false;
+        category = Category.fromJson(response.data);
+    } catch (e, s) {
+      debugPrint(e);
+      debugPrint(s.toString());
     }
+    return category;
   }
 
   Future<List<Category>> index() async {
