@@ -47,11 +47,7 @@ abstract class _CategoryStoreBase with Store {
 
       if (response) {
         await updateCategory(
-          Category(
-            id: category.id,
-            name: category.name,
-            synchronized: true,
-          ),
+          category.copyWith(synchronized: true),
         );
       } else {
         print(

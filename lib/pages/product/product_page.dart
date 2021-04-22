@@ -6,6 +6,7 @@ import 'package:moor_example/db/dao/products/product_dao.dart';
 import 'package:moor_example/db/database.dart';
 import 'package:moor_example/pages/category/category_page.dart';
 import 'package:moor_example/stores/products/products_store.dart';
+import 'package:moor_example/utils/background_helper.dart';
 import 'package:moor_example/utils/utils.dart';
 
 class ProductPage extends StatefulWidget {
@@ -25,6 +26,11 @@ class _ProductPageState extends State<ProductPage> {
 
     synchronize();
 
+    BackgroundHelper.initPlatformState().then((value) {
+      synchronize();
+      _controller.find();
+    });
+
     subscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -32,11 +38,12 @@ class _ProductPageState extends State<ProductPage> {
     });
   }
 
-@override
-void dispose() { 
-  subscription.cancel();
-  super.dispose();
-}
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   _addProduct() {
     _controller.nameController.clear();
     _controller.descriptionController.clear();

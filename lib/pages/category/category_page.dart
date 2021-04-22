@@ -23,17 +23,17 @@ class _CategoryPageState extends State<CategoryPage> {
   void initState() {
     super.initState();
 
-    BackgroundHelper.initPlatformState().then((value) {
-      synchronize();
-      _controller.find();
-    });
+    // BackgroundHelper.initPlatformState().then((value) {
+    //   synchronize();
+    //   _controller.find();
+    // });
 
     // synchronize();
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      synchronize();
-    });
+    // subscription = Connectivity()
+    //     .onConnectivityChanged
+    //     .listen((ConnectivityResult result) {
+    //   synchronize();
+    // });
   }
 
   @override
